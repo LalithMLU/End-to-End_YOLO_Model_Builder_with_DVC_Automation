@@ -1,0 +1,6 @@
+cvat-sdk==2.15.0
+opencv-python==4.10.0.84
+ffmpeg==1.4
+dvc==3.53.1
+ffmpeg-python==0.2.0
+

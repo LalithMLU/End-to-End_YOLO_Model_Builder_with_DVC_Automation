@@ -1,0 +1,65 @@
+# Parameters associated with Export Entity
+
+import:
+  # Credentials and connection details for CVAT instance
+  host: http://<CVAT-IP>:<PORT>          # Example: http://127.0.0.1:8080
+  username: "<your_username>"            # Example: "admin"
+  password: "<your_password>"            # Example: "admin123"
+
+  # Project/task information
+  project_id: <project_id>               # Example: 1
+  task_name: "<task_name>"               # Example: "vehicle_detection"
+
+  # Task configuration
+  TaskSize: <number_of_frames_per_task>  # Optional - defines chunk size
+  skip_frames: <number_to_skip>          # Example: 5 - skip every 5th frame
+
+  # Input/output directories for initial video processing
+  input_folder: /path/to/raw/videos
+  output_folder_mp4: /path/to/output/mp4_videos
+  output_folder_frames: /path/to/output/extracted_frames
+
+export:
+  # CVAT automation export configuration
+  host: http://<CVAT-IP>:<PORT>          # Example: http://127.0.0.1:8080
+  username: "<your_username>"            # CVAT login username
+  password: "<your_password>"            # CVAT login password
+
+  exp_format: YOLO 1.1                   # Annotation export format
+  entity_type: "3"                       # 1 = Project, 2 = Task, 3 = Job
+  project_id: <project_id>               # Example: 1
+  task_id: <task_id>                     # Example: 100
+
+  # Job IDs to export (comma-separated)
+  job_id: 1001,1002,1003                 # Example job IDs
+
+  # File system paths for export files
+  base_path: /path/to/export_folder
+  zip_path: /path/to/export_folder/zip   # Where exported zip will be stored
+  target_directoryimgs: /path/to/export_folder/zip/dataset/labeled_data/imgs
+  target_directorylabels: /path/to/export_folder/zip/dataset/labeled_data/labels
+
+split:
+  # Split exported data into a YOLO-compatible dataset
+  images_folder: /path/to/imgs_folder
+  labels_folder: /path/to/labels_folder
+  yolo_dataset: /path/to/yolo_formatted_dataset
+
+train:
+  # Training configuration
+  plant: ExamplePlant                    # Example: "FactoryA"
+  epochs: 30                             # Number of training epochs
+  imgsz: 640                             # Input image size for YOLO
+  yolo_dataset: /path/to/yolo_dataset    # Path to training dataset
+
+  # List of object classes in the dataset
+  classes:
+    - car
+    - bike
+    - auto
+    - bus
+    - livestock
+    - helmet
+    - no_helmet
+    - truck
+    - number_plate

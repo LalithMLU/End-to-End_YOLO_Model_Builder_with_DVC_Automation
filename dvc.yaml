@@ -1,0 +1,72 @@
+stages:
+  import:
+    # Stage to import videos and create tasks in CVAT
+    cmd: python /path/to/src/cvat_automation_import/Latest_CVAT_ImportExport.py
+    deps:
+      - /path/to/src/cvat_automation_import/Latest_CVAT_ImportExport.py
+    params:
+      - import.host                     # CVAT host URL
+      - import.username                 # CVAT username
+      - import.password                 # CVAT password
+      - import.project_id               # Project ID for CVAT
+      - import.task_name                # Task name to be created
+      - import.TaskSize                 # Frame chunk size for CVAT
+      - import.skip_frames              # Number of frames to skip during import
+      - import.output_folder_mp4        # Directory to save MP4 output
+      - import.output_folder_frames     # Directory to save extracted frames
+      - import.input_folder             # Input folder containing videos
+
+  confirmation:
+    # Stage to confirm that annotation process is complete (optional manual or automated check)
+    cmd: python /path/to/src/Annotation_confirmation/confirmation.py
+    deps:
+      - /path/to/src/Annotation_confirmation/confirmation.py
+
+  export:
+    # Stage to export annotations from CVAT
+    cmd: python /path/to/src/cvat_automation_export/Latest_CVAT_ImportExport.py
+    deps:
+      - /path/to/src/cvat_automation_export/Latest_CVAT_ImportExport.py
+      - /path/to/src/cvat_automation_export/ExtractVersionMkdirs_Working.py
+    params:
+      - export.base_path                # Base path to store exported files
+      - export.entity_type              # Export entity type (e.g., job)
+      - export.exp_format               # Export format (e.g., YOLO)
+      - export.host                     # CVAT host
+      - export.job_id                   # Job IDs to export
+      - export.password                 # CVAT password
+      - export.project_id               # Project ID
+      - export.target_directoryimgs     # Output directory for images
+      - export.target_directorylabels   # Output directory for labels
+      - export.task_id                  # Task ID
+      - export.username                 # CVAT username
+      - export.zip_path                 # Path to store exported zip files
+
+  split:
+    # Stage to convert and split exported data into YOLO format
+    cmd: python /path/to/src/splitting_dataset/splitting_dataset.py
+    deps:
+      - /path/to/src/splitting_dataset/splitting_dataset.py
+    params:
+      - split.images_folder             # Path to folder with images
+      - split.labels_folder             # Path to folder with labels
+      - split.yolo_dataset              # Output directory for YOLO dataset
+
+  train:
+    # Stage to train YOLO model
+    cmd: python /path/to/src/trainning/training.py
+    deps:
+      - /path/to/src/trainning/training.py
+    params:
+      - train.plant                     # Name of the plant/factory (context info)
+      - train.epochs                    # Number of training epochs
+      - train.imgsz                     # Image size for training
+      - train.classes                   # List of classes to train on
+
+  optimization:
+    # Stage to convert model for OpenVINO deployment
+    cmd: python /path/to/src/openvino_conversion/openvino_conversion.py
+    deps:
+      - /path/to/src/openvino_conversion/openvino_conversion.py
+    params:
+      - train.plant                     # Plant name used for organizing model export
